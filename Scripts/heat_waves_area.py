@@ -43,7 +43,7 @@ plt.rcParams['figure.figsize'] = (15,10)
 #         "longitude_slice" : slice(12.5, 14.5),
 #         }
 
-# save_dict = {
+save_dict = {
         "savefolder" : r"C:\Users\Nils Niebaum\Documents\Uni\Bachlor_thesis\Prog\Data\\",
         "location" : location,
         "savename" : location + "_{}_{}.nc".format(timestart, timeend), # old: "savename" : r"swbgt" + "_{}_{}_{}.nc".format(location, timestart, timeend),
