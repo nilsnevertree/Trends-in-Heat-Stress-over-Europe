@@ -29,19 +29,19 @@ import Calculation.heat_wave_indetification as hwi
 # plt.style.use('ggplot')
 plt.rcParams['figure.figsize'] = (15,10)
 
-# output_dtype = float
-# timestart = "1980-01-01"
-# timeend = "2010-12-31"
-# location = "europe_all"
-# # rolling_window = 4*365
-# timeslice = slice("2003-06-15", "2003-09-15")
-# load_dict = {
-#         't2m_path' : r"I:\Bachlor_thesis\Data\t2m_era20c_1900-2010.nc",
-#         'd2m_path' : r"I:\Bachlor_thesis\Data\td2m_era20c_1900-2010.nc",
-#         'time_slice' : slice(timestart, timeend),
-#         "latitude_slice" : slice(53.5, 51.5),
-#         "longitude_slice" : slice(12.5, 14.5),
-#         }
+output_dtype = float
+timestart = "1980-01-01"
+timeend = "2010-12-31"
+location = "europe_all"
+# rolling_window = 4*365
+timeslice = slice("2003-06-15", "2003-09-15")
+load_dict = {
+        't2m_path' : r"I:\Bachlor_thesis\Data\t2m_era20c_1900-2010.nc",
+        'd2m_path' : r"I:\Bachlor_thesis\Data\td2m_era20c_1900-2010.nc",
+        'time_slice' : slice(timestart, timeend),
+        "latitude_slice" : slice(53.5, 51.5),
+        "longitude_slice" : slice(12.5, 14.5),
+        }
 
 save_dict = {
         "savefolder" : r"C:\Users\Nils Niebaum\Documents\Uni\Bachlor_thesis\Prog\Data\\",
