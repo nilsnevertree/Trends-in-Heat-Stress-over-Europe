@@ -1,0 +1,1 @@
+CIESIN, 2017: Gridded population of the world, version 4 (gpwv4): Population density, revision 10. Center for International Earth Science Information Network - CIESIN - Columbia Uni- versity. NASA Socioeconomic Data and Applications Center (SEDAC), URL https://doi.org/10. 7927/H4DZ068D.
