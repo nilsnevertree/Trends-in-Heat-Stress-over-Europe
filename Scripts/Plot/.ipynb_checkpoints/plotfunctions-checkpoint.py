@@ -55,7 +55,8 @@ def area_plot(data = None, ax = None,
         pcolormesh_kwargs = dict(edgecolors= 'face', snap = True),
         contour_kwargs = dict(colors= 'k', linestyles = '--', linewidths = 1.5), 
         colorbar_kwargs = dict(),
-        set_extent = True):
+        set_extent = True,
+        axes_title = ""):
         
     '''
     this function drwas the provided data and the gridliines and land and ocean to a geoaxes object provided.
@@ -181,6 +182,11 @@ def area_plot(data = None, ax = None,
     gl2.left_labels = False
 #     gl.xlocator = mticker.FixedLocator(range(-30,71,10))
 #     gl.ylocator = mticker.FixedLocator(range(30,80,10))
+    
+    # set axes title
+    # ax.text(0.05, 0.945, '   ', ha='center', va='center', backgroundcolor = [1,1,1,0.85], transform=ax.transAxes, size = rcParams_area['axes.labelsize'], weight = 'normal', zorder = 15)
+    ax.text(0.1, 0.94, ' ' + axes_title, ha='center', va='center', transform=ax.transAxes, size = rcParams_area['axes.labelsize'], weight = 'bold', zorder = 15)
+    
     
     if set_extent :
         ax.set_extent([-15,51,29,71])
