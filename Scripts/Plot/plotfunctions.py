@@ -153,36 +153,35 @@ def area_plot(data = None, ax = None,
         
     # plot gridlines and coastlines
     
-    if gridline_kwargs :
 
-        gridline_kwargs.setdefault('linewidth' , 1)
-        gridline_kwargs.setdefault('color' , 'grey')
-        gridline_kwargs.setdefault('alpha' , 0.5)
-        gridline_kwargs.setdefault('linestyle' ,':')
-        gridline_kwargs.setdefault('zorder' , 8)
-        gridline_kwargs.setdefault('top_labels' , False)
-        gridline_kwargs.setdefault('right_labels' , False)
-        gridline_kwargs.setdefault('bottom_labels' , True)
-        gridline_kwargs.setdefault('left_labels' , True)
+    gridline_kwargs.setdefault('linewidth' , 1)
+    gridline_kwargs.setdefault('color' , 'grey')
+    gridline_kwargs.setdefault('alpha' , 0.5)
+    gridline_kwargs.setdefault('linestyle' ,':')
+    gridline_kwargs.setdefault('zorder' , 8)
+    gridline_kwargs.setdefault('top_labels' , False)
+    gridline_kwargs.setdefault('right_labels' , False)
+    gridline_kwargs.setdefault('bottom_labels' , True)
+    gridline_kwargs.setdefault('left_labels' , True)
 
-        top_labels = gridline_kwargs.pop('top_labels')
-        right_labels = gridline_kwargs.pop('right_labels')
-        bottom_labels = gridline_kwargs.pop('bottom_labels')
-        left_labels = gridline_kwargs.pop('left_labels')
+    top_labels = gridline_kwargs.pop('top_labels')
+    right_labels = gridline_kwargs.pop('right_labels')
+    bottom_labels = gridline_kwargs.pop('bottom_labels')
+    left_labels = gridline_kwargs.pop('left_labels')
 
-        gl = ax.gridlines(crs=ccrs.PlateCarree(), ** gridline_kwargs)
-        gl.xlines = True
-        gl.top_labels = top_labels 
-        gl.right_labels = right_labels 
-        gl.bottom_labels = bottom_labels 
-        gl.left_labels = left_labels
-        gl.xlocator = mticker.FixedLocator(range(-10,51,10))
-        gl.ylocator = mticker.FixedLocator(range(30,71,10))
-        gl.xformatter = LONGITUDE_FORMATTER
-        gl.yformatter = LATITUDE_FORMATTER
-        gl.xlabel_style = dict(color = 'k', rotation = 'horizontal', fontsize  = rcParams_area['xtick.labelsize'])
-        gl.ylabel_style = dict(color = 'k', rotation = 'horizontal', fontsize  = rcParams_area['ytick.labelsize'])
-        ax.add_feature(feature.COASTLINE, zorder = 10, color = 'k')
+    gl = ax.gridlines(crs=ccrs.PlateCarree(), ** gridline_kwargs)
+    gl.xlines = True
+    gl.top_labels = top_labels 
+    gl.right_labels = right_labels 
+    gl.bottom_labels = bottom_labels 
+    gl.left_labels = left_labels
+    gl.xlocator = mticker.FixedLocator(range(-10,51,10))
+    gl.ylocator = mticker.FixedLocator(range(30,71,10))
+    gl.xformatter = LONGITUDE_FORMATTER
+    gl.yformatter = LATITUDE_FORMATTER
+    gl.xlabel_style = dict(color = 'k', rotation = 'horizontal', fontsize  = rcParams_area['xtick.labelsize'])
+    gl.ylabel_style = dict(color = 'k', rotation = 'horizontal', fontsize  = rcParams_area['ytick.labelsize'])
+    ax.add_feature(feature.COASTLINE, zorder = 10, color = 'k')
 
 #     gl.xlocator = mticker.FixedLocator(range(-30,71,10))
 #     gl.ylocator = mticker.FixedLocator(range(30,80,10))
