@@ -313,7 +313,7 @@ def get_AR6_coords(url = 'https://raw.githubusercontent.com/IPCC-WG1/Atlas/maste
     regions[3]['name'] = 'CEU'
     return regions
 
-def plot_all_regions(ax, regions = get_AR6_coords(), colors = ['tab:red','tab:green','tab:orange','tab:blue'], 
+def plot_all_regions(ax, regions = get_AR6_coords(), colors = ['tab:red','tab:green','tab:blue','tab:orange'], 
                      linestyle = ['--','--','--','--'], 
                      linewidth = [0.75,0.75,0.75,0.75],
                      underline = False) :
