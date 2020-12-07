@@ -313,10 +313,11 @@ def get_AR6_coords(url = 'https://raw.githubusercontent.com/IPCC-WG1/Atlas/maste
     regions[3]['name'] = 'CEU'
     return regions
 
-def plot_all_regions(ax, regions = get_AR6_coords(), colors = ['tab:red','tab:green','tab:blue','tab:orange'], 
+def plot_all_regions(ax, regions = get_AR6_coords(), colors = ['tab:red','tab:green','tab:orange','tab:blue'], 
                      linestyle = ['--','--','--','--'], 
                      linewidth = [0.75,0.75,0.75,0.75],
-                     underline = False) :
+                     underline = False,
+                    zorder = 20) :
     if not isinstance(linewidth,list) :
         linewidth = [linewidth, linewidth, linewidth, linewidth]
     if not isinstance(linestyle,list) :
@@ -332,8 +333,8 @@ def plot_all_regions(ax, regions = get_AR6_coords(), colors = ['tab:red','tab:gr
     lines = []
     for region in regions :
         if underline :
-            ax.plot(region['longitude'],region['latitude'], linestyle = '-', color = 'w', linewidth = region['plotkwargs']['linewidth'] + underline,transform = ccrs.PlateCarree(), zorder = 20)
-        line = ax.plot(region['longitude'],region['latitude'], transform = ccrs.PlateCarree(), **region['plotkwargs'], zorder = 20)
+            ax.plot(region['longitude'],region['latitude'], linestyle = '-', color = 'w', linewidth = region['plotkwargs']['linewidth'] + underline,transform = ccrs.PlateCarree(), zorder = zorder)
+        line = ax.plot(region['longitude'],region['latitude'], transform = ccrs.PlateCarree(), **region['plotkwargs'], zorder = zorder)
         lines.append(line)
 
 # REST
