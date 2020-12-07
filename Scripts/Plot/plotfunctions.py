@@ -56,7 +56,7 @@ def area_plot(data = None, ax = None,
         contour_kwargs = dict(colors= 'k', linestyles = '--', linewidths = 1.5), 
         colorbar_kwargs = dict(),
         set_extent = True,
-        axes_title = ""):
+        axes_title = False):
         
     '''
     this function drwas the provided data and the gridliines and land and ocean to a geoaxes object provided.
@@ -79,26 +79,31 @@ def area_plot(data = None, ax = None,
     OUTPUT: 
     - mapple objects of the pcolormesh (pmesh) and the contour plot (ct) 
     '''
+    
     #create colormap
     colorbar_kwargs.setdefault('divergent' , False)
     colorbar_kwargs.setdefault('add_colorbar' , True)
-    colorbar_kwargs.setdefault('extend' , None)
+    colorbar_kwargs.setdefault('extend' , 'both')
     colorbar_kwargs.setdefault('contour_levels' , None)
-    
+    colorbar_kwargs.setdefault('norm' , False)
     contour_kwargs.setdefault('contour_levels' , None)
 
     # check how to extend the colorbar 
-    if colorbar_kwargs['extend'] is None:
-        if (data.max() > max(levels)) & (data.min() < min(levels)):
-            colorbar_kwargs['extend'] = 'both'
-        elif data.max() > max(levels) :
-            colorbar_kwargs['extend'] = 'max'
-        elif data.min() < min(levels) :
-            colorbar_kwargs['extend'] = 'min'
-        else : colorbar_kwargs['extend'] = 'neither'
-        
+
+    if (data.max() > max(levels)) & (data.min() < min(levels)):
+        colorbar_kwargs['extend'] = 'both'
+    elif data.max() > max(levels) :
+        colorbar_kwargs['extend'] = 'max'
+    elif data.min() < min(levels) :
+        colorbar_kwargs['extend'] = 'min'
+    else :
+        colorbar_kwargs['extend'] = 'neither'
+    
     cmap_obj = plt.get_cmap(cmap, )
-    if colorbar_kwargs['divergent'] :
+    
+    if colorbar_kwargs['norm']:
+        norm = colorbar_kwargs['norm']
+    elif colorbar_kwargs['divergent'] :
         # create new levels so its evenly spaced
         length_div = sum(levels > 0) * 2 + 1
         max_div = np.max(np.abs(levels))
@@ -124,7 +129,8 @@ def area_plot(data = None, ax = None,
                 transform = ccrs.PlateCarree(),
                 norm = norm, shading = 'nearest',
                 zorder=3, **pcolormesh_kwargs)  
-    else : pass
+    else : 
+        mapple_object = None
 
     if contour :
         ct = data.plot.contour(ax= ax, levels= contour_levels, 
@@ -147,48 +153,44 @@ def area_plot(data = None, ax = None,
         
     # plot gridlines and coastlines
     
+    if gridline_kwargs :
 
-    gridline_kwargs.setdefault('linewidth' , 1)
-    gridline_kwargs.setdefault('color' , 'grey')
-    gridline_kwargs.setdefault('alpha' , 0.5)
-    gridline_kwargs.setdefault('linestyle' ,':')
-    gridline_kwargs.setdefault('zorder' , 8)
-    gridline_kwargs.setdefault('top_labels' , False)
-    gridline_kwargs.setdefault('right_labels' , False)
-    gridline_kwargs.setdefault('bottom_labels' , True)
-    gridline_kwargs.setdefault('left_labels' , True)
-    
-    top_labels = gridline_kwargs.pop('top_labels')
-    right_labels = gridline_kwargs.pop('right_labels')
-    bottom_labels = gridline_kwargs.pop('bottom_labels')
-    left_labels = gridline_kwargs.pop('left_labels')
-    
-    gl = ax.gridlines(crs=ccrs.PlateCarree(), ** gridline_kwargs)
-    gl.xlines = True
-    gl.top_labels = top_labels 
-    gl.right_labels = right_labels 
-    gl.bottom_labels = bottom_labels 
-    gl.left_labels = left_labels
-    gl.xlocator = mticker.FixedLocator(range(-10,51,10))
-    gl.ylocator = mticker.FixedLocator(range(30,71,10))
-    gl.xformatter = LONGITUDE_FORMATTER
-    gl.yformatter = LATITUDE_FORMATTER
-    gl.xlabel_style = dict(color = 'k', rotation = 'horizontal', fontsize  = rcParams_area['xtick.labelsize'])
-    gl.ylabel_style = dict(color = 'k', rotation = 'horizontal', fontsize  = rcParams_area['ytick.labelsize'])
-    ax.add_feature(feature.COASTLINE, zorder = 10, color = 'k')
-    
-    gridline_kwargs['draw_labels'] = False
-    gl2 = ax.gridlines(crs=ccrs.PlateCarree(), ** gridline_kwargs)
-    gl2.top_labels = False
-    gl2.right_labels = False
-    gl2.bottom_labels = False
-    gl2.left_labels = False
+        gridline_kwargs.setdefault('linewidth' , 1)
+        gridline_kwargs.setdefault('color' , 'grey')
+        gridline_kwargs.setdefault('alpha' , 0.5)
+        gridline_kwargs.setdefault('linestyle' ,':')
+        gridline_kwargs.setdefault('zorder' , 8)
+        gridline_kwargs.setdefault('top_labels' , False)
+        gridline_kwargs.setdefault('right_labels' , False)
+        gridline_kwargs.setdefault('bottom_labels' , True)
+        gridline_kwargs.setdefault('left_labels' , True)
+
+        top_labels = gridline_kwargs.pop('top_labels')
+        right_labels = gridline_kwargs.pop('right_labels')
+        bottom_labels = gridline_kwargs.pop('bottom_labels')
+        left_labels = gridline_kwargs.pop('left_labels')
+
+        gl = ax.gridlines(crs=ccrs.PlateCarree(), ** gridline_kwargs)
+        gl.xlines = True
+        gl.top_labels = top_labels 
+        gl.right_labels = right_labels 
+        gl.bottom_labels = bottom_labels 
+        gl.left_labels = left_labels
+        gl.xlocator = mticker.FixedLocator(range(-10,51,10))
+        gl.ylocator = mticker.FixedLocator(range(30,71,10))
+        gl.xformatter = LONGITUDE_FORMATTER
+        gl.yformatter = LATITUDE_FORMATTER
+        gl.xlabel_style = dict(color = 'k', rotation = 'horizontal', fontsize  = rcParams_area['xtick.labelsize'])
+        gl.ylabel_style = dict(color = 'k', rotation = 'horizontal', fontsize  = rcParams_area['ytick.labelsize'])
+        ax.add_feature(feature.COASTLINE, zorder = 10, color = 'k')
+
 #     gl.xlocator = mticker.FixedLocator(range(-30,71,10))
 #     gl.ylocator = mticker.FixedLocator(range(30,80,10))
     
     # set axes title
     # ax.text(0.05, 0.945, '   ', ha='center', va='center', backgroundcolor = [1,1,1,0.85], transform=ax.transAxes, size = rcParams_area['axes.labelsize'], weight = 'normal', zorder = 15)
-    ax.text(0.1, 0.94, ' ' + axes_title, ha='center', va='center', transform=ax.transAxes, size = rcParams_area['axes.labelsize'], weight = 'bold', zorder = 15)
+    if axes_title :
+        ax.text(0.1, 0.94, ' ' + axes_title, ha='center', va='center', transform=ax.transAxes, size = rcParams_area['axes.labelsize'], weight = 'bold', zorder = 15)
     
     
     if set_extent :
@@ -280,6 +282,60 @@ hex_list = ['#ffffff', '#f4f4f9', '#f9dcc4', '#fcbf49', '#f77f00', '#d62828', '#
 hwmid = get_continuous_cmap(hex_list, float_list=[0, 0.1, 0.3, 0.5, 0.75, 0.85, 0.5, 1])
 
 
+def get_AR6_coords(url = 'https://raw.githubusercontent.com/IPCC-WG1/Atlas/master/reference-regions/IPCC-WGI-reference-regions-v4_coordinates.csv') :
+    
+    points = ['p0','p1','p2','p3','p4','p5','p6','p7','p8','p9','p10','p11','p12','p13']
+    import pandas as pd
+    df = pd.read_csv(url, nrows = 32, header = None,
+                     names = ['continent','land/ocean','long_name','short_name'] + points)
+
+    regions = [dict(name = 'NEU', region = 16), 
+                   dict(name = 'EEU', region = 18), 
+                   dict(name = 'MED', region = 19),
+                   dict(name = 'WCE', region = 17), ]
+
+    for region in regions : 
+        region['latitude'] = []
+        region['longitude'] = []
+        region_row = df.loc[df['short_name'] == region['name']]
+    #     print(region_row)
+        for p in points[0:-1] :
+    #         print(p)
+    #         print(region_row[p].values[0])
+            if isinstance(region_row[p].values[0], str):
+                test = region_row[p].str.split('|').values[0]
+                longitude = float(test[0])
+                latitude = float(test[1])
+                region['latitude'].append(latitude)
+                region['longitude'].append(longitude)
+        region['latitude'].append(region['latitude'][0])
+        region['longitude'].append(region['longitude'][0])
+
+    regions[3]['name'] = 'CEU'
+    return regions
+
+def plot_all_regions(ax, regions = get_AR6_coords(), colors = ['tab:red','tab:green','tab:orange','tab:blue'], 
+                     linestyle = ['--','--','--','--'], 
+                     linewidth = [0.75,0.75,0.75,0.75],
+                     underline = False) :
+    if not isinstance(linewidth,list) :
+        linewidth = [linewidth, linewidth, linewidth, linewidth]
+    if not isinstance(linestyle,list) :
+        linestyle = [linestyle, linestyle, linestyle, linestyle]
+    if not isinstance(colors,list) :
+        colors = [colors, colors, colors, colors]
+        
+        
+    for idx in range(len(regions)) :
+        regions[idx]['plotkwargs'] = dict(color = colors[idx] , 
+                                          linestyle = linestyle[idx], 
+                                          linewidth = linewidth[idx])
+    lines = []
+    for region in regions :
+        if underline :
+            ax.plot(region['longitude'],region['latitude'], linestyle = '-', color = 'w', linewidth = region['plotkwargs']['linewidth'] + underline,transform = ccrs.PlateCarree(), zorder = 20)
+        line = ax.plot(region['longitude'],region['latitude'], transform = ccrs.PlateCarree(), **region['plotkwargs'], zorder = 20)
+        lines.append(line)
 
 # REST
 # def plot_30y_area(data = None, mask_res = None, 
