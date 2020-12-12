@@ -83,21 +83,22 @@ def area_plot(data = None, ax = None,
     #create colormap
     colorbar_kwargs.setdefault('divergent' , False)
     colorbar_kwargs.setdefault('add_colorbar' , True)
-    colorbar_kwargs.setdefault('extend' , 'both')
+    colorbar_kwargs.setdefault('extend' , None)
     colorbar_kwargs.setdefault('contour_levels' , None)
     colorbar_kwargs.setdefault('norm' , False)
     contour_kwargs.setdefault('contour_levels' , None)
 
     # check how to extend the colorbar 
-
-    if (data.max() > max(levels)) & (data.min() < min(levels)):
-        colorbar_kwargs['extend'] = 'both'
-    elif data.max() > max(levels) :
-        colorbar_kwargs['extend'] = 'max'
-    elif data.min() < min(levels) :
-        colorbar_kwargs['extend'] = 'min'
-    else :
-        colorbar_kwargs['extend'] = 'neither'
+    
+    if colorbar_kwargs['extend'] is None:
+        if (data.max() > max(levels)) & (data.min() < min(levels)):
+            colorbar_kwargs['extend'] = 'both'
+        elif data.max() > max(levels) :
+            colorbar_kwargs['extend'] = 'max'
+        elif data.min() < min(levels) :
+            colorbar_kwargs['extend'] = 'min'
+        else :
+            colorbar_kwargs['extend'] = 'neither'
     
     cmap_obj = plt.get_cmap(cmap, )
     
@@ -163,13 +164,13 @@ def area_plot(data = None, ax = None,
     gridline_kwargs.setdefault('right_labels' , False)
     gridline_kwargs.setdefault('bottom_labels' , True)
     gridline_kwargs.setdefault('left_labels' , True)
-
+    
     top_labels = gridline_kwargs.pop('top_labels')
     right_labels = gridline_kwargs.pop('right_labels')
     bottom_labels = gridline_kwargs.pop('bottom_labels')
     left_labels = gridline_kwargs.pop('left_labels')
 
-    gl = ax.gridlines(crs=ccrs.PlateCarree(), ** gridline_kwargs)
+    gl = ax.gridlines(crs=ccrs.PlateCarree(), **gridline_kwargs)
     gl.xlines = True
     gl.top_labels = top_labels 
     gl.right_labels = right_labels 
@@ -181,11 +182,23 @@ def area_plot(data = None, ax = None,
     gl.yformatter = LATITUDE_FORMATTER
     gl.xlabel_style = dict(color = 'k', rotation = 'horizontal', fontsize  = rcParams_area['xtick.labelsize'])
     gl.ylabel_style = dict(color = 'k', rotation = 'horizontal', fontsize  = rcParams_area['ytick.labelsize'])
-    ax.add_feature(feature.COASTLINE, zorder = 10, color = 'k')
-
-#     gl.xlocator = mticker.FixedLocator(range(-30,71,10))
-#     gl.ylocator = mticker.FixedLocator(range(30,80,10))
+    ax.add_feature(feature.COASTLINE, zorder = 10, color = 'k')    
+    gl.xlocator = mticker.FixedLocator(range(-10,51,10))
     
+    def add_outer_gridline(xloc = range(-20,30,10)):
+        # plots x-gridlines without labels and can therefore be used to plot gridlines left and right of labels gridlines.
+        # this makes sense, if longitudes get displayed at boundaries  
+        gl_new = ax.gridlines(crs=ccrs.PlateCarree(), **gridline_kwargs)
+        gl_new.xlines = True
+        gl_new.ylines = False
+        gl_new.top_labels = False 
+        gl_new.right_labels = False
+        gl_new.bottom_labels = False
+        gl_new.left_labels = False
+        gl_new.xlocator = mticker.FixedLocator(xloc)
+    
+    add_outer_gridline(range(-30,-11,10))
+    add_outer_gridline(range(60,81,10))
     # set axes title
     # ax.text(0.05, 0.945, '   ', ha='center', va='center', backgroundcolor = [1,1,1,0.85], transform=ax.transAxes, size = rcParams_area['axes.labelsize'], weight = 'normal', zorder = 15)
     if axes_title :
