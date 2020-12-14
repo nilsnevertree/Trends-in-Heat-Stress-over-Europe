@@ -232,7 +232,19 @@ def add_cbar(fig, ax, mapple_object, divide = 'horizontal', label = False, perce
         cbar.ax.set_xlabel(label, rotation=0)
     return cbar
 
+def plot_swbgt_threat_levels(ax = None, data = None, kwargs = dict()):
+    '''
+    plots swbgtx threat levls defined by BUzan et al. based on the swbgtx xarray onto the axes object
+    '''
+    kwargs.setdefault('colors', ['k','k','k','w'])
+    kwargs.setdefault('linestyles' , [':','--','-','-'])
+    kwargs.setdefault('linewidths' , 1.5)
 
+    ct = data.plot.contour(ax= ax, levels= [26.7, 29.4, 31.1, 32.2], 
+            x="longitude", y="latitude",
+            yincrease=True, transform=ccrs.PlateCarree(),
+            add_colorbar= False,
+            zorder=15, **kwargs)
 
 # ===============
 # colormap creation by Kerry Halupka
