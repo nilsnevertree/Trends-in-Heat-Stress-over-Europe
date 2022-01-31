@@ -54,8 +54,9 @@ def calc_heatwave_index(mask_original, duration = 1, as_DataArray = True):
                 # the & operator is used to get True for each day where 
                 # afterwards at least for duration the mask_origianl is True (see Note) 
                 mask_temporary = mask_temporary & mask_index
-
-        mask_result = mask_original.values == -99 # this just creates a mask with False everywhere (see Note)
+        
+        # Following suggestion of Asclepius from stackoverflow to use numpy full, to make sure mask_result will be fully False
+        mask_result = np.full(np.shape(mask_original.values), False)  
         for index in range(duration):
                 # same slice as in 1. for loop
                 selection = np.arange(index, time_length - duration + index, 1)
